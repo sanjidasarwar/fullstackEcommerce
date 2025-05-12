@@ -30,9 +30,7 @@ const loginUser = async (req, res) =>{
             email: user.email,
         }
 
-        const token = createToken(userObj)
-        console.log(token);
-        
+        const token = createToken(userObj)        
 
         res.cookie(process.env.COOKIE_NAME, token,  {
             maxAge: process.env.JWT_EXPIRY,

@@ -4,6 +4,7 @@ import "dotenv/config";
 import express from "express";
 import connectCloudinary from "./config/cloudinary.js";
 import connectDB from "./config/mongodb.js";
+import productRoute from "./routes/productRoute.js";
 import userRoute from "./routes/userRoute.js";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 
 // api endpoint
 app.use('/user', userRoute)
+app.use('/product', productRoute)
 
 app.get('/', (req, res)=>{
     res.send('Api working')
