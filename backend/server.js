@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
@@ -11,9 +12,11 @@ connectCloudinary()
 
 const port = process.env.PORT || 8000
 
+
 // middlewares
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser(process.env.COOKIE_SECRET))
 
 // api endpoint
 app.use('/user', userRoute)

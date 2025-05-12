@@ -1,9 +1,55 @@
 import bycript from "bcrypt"
 import validator from "validator"
 import User from "../models/User.js"
+import createToken from "../utilities/createToken.js"
 
 // route for login
 const loginUser = async (req, res) =>{
+    try {
+            const user = await User.findOne({
+            $or: [{email: req.body.name}, {name: req.body.name} ]
+        })
+
+        if(!user){
+            res.status(500).json({
+                success:false,
+                message: 'Please enter a valid Name/Email'
+            })
+        }
+
+        const validPassword = await bycript.compare(req.body.password, user.password)
+        if(!validPassword){
+            res.status(500).json({
+                success:false,
+                message: 'Please enter a valid password'
+            })
+        }
+        const userObj ={
+            id: user._id,
+            name: user.name,
+            email: user.email,
+        }
+
+        const token = createToken(userObj)
+        console.log(token);
+        
+
+        res.cookie(process.env.COOKIE_NAME, token,  {
+            maxAge: process.env.JWT_EXPIRY,
+            httpOnly: true,
+            signed: true,
+        })
+        res.status(200).json({
+            message: 'Login Sucessful'
+        })
+
+    } catch (error) {
+            res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+
 
 }
 
@@ -17,7 +63,9 @@ const loginAdmin = async (req, res, next) =>{
 const registerUser = async (req, res) =>{
     try {
         const {name, email, password} = req.body
-        const exists = await UserModel.findOne({email:email})
+        console.log(typeof(name), typeof(email), typeof(password));
+        
+        const exists = await User.findOne({email:email})
         if(exists){
             return res.json({
                 success:false,
@@ -25,7 +73,7 @@ const registerUser = async (req, res) =>{
             })
         }
 
-        if(!validator.isEmail()){
+        if(!validator.isEmail(email)){
             return res.status(500).json({
                 success: false,
                 message: 'Please enter a valid email.'
@@ -66,7 +114,7 @@ const registerUser = async (req, res) =>{
     } catch (error) {
         res.status(500).json({
             success:false,
-            message:error.message
+            message:`Error => ${error.message}`
         })
     }
 
