@@ -40,6 +40,7 @@ const addProduct = async (req, res) => {
       sizes: JSON.parse(sizes),
       bestseller: bestseller === "true",
       date: Date.now(),
+      image: imageUrl,
     };
 
     const newProduct = await new ProductModel(prodeuctData);
