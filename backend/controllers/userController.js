@@ -35,13 +35,9 @@ const loginUser = async (req, res) => {
 
     const token = createToken(userObj);
 
-    res.cookie(process.env.COOKIE_NAME, token, {
-      maxAge: process.env.JWT_EXPIRY,
-      httpOnly: true,
-      signed: true,
-    });
     res.status(200).json({
       message: "Login Sucessful",
+      token,
     });
   } catch (error) {
     res.status(500).json({
@@ -63,6 +59,7 @@ const loginAdmin = (req, res) => {
         email,
         password,
       };
+
       const token = createToken(adminObj);
       res.status(200).json({
         success: true,

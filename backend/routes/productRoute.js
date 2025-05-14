@@ -1,16 +1,18 @@
 import express from "express";
 import {
-    addProduct,
-    listProducts,
-    removeProduct,
-    singleProduct,
+  addProduct,
+  listProducts,
+  removeProduct,
+  singleProduct,
 } from "../controllers/productController.js";
+import adminAuth from "../middleware/adminAuth.js";
 import upload from "../middleware/imageUpload.js";
 
 const productRoute = express.Router();
 
 productRoute.post(
   "/add",
+  adminAuth,
   upload.fields([
     { name: "image1", maxCount: 1 },
     { name: "image2", maxCount: 1 },
