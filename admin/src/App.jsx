@@ -11,10 +11,13 @@ export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 function App() {
   const [token, setToken] = useState("");
+  const handleToken = (token) => {
+    setToken(token);
+  };
   return (
     <div className="bg-gray-50 min-h-screen">
       {token === "" ? (
-        <Login />
+        <Login handleToken={handleToken} />
       ) : (
         <>
           <Navbar />

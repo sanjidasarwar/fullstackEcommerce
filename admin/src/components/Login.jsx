@@ -1,14 +1,28 @@
+import axios from "axios";
 import { useState } from "react";
-
-const Login = () => {
+import { toast } from "react-toastify";
+import { backendUrl } from "../App";
+const Login = ({ handleToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      console.log(email, password);
-    } catch (error) {}
+      const response = await axios.post(`${backendUrl}/user/admin`, {
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        handleToken(response.data.token);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center w-full">
@@ -22,7 +36,6 @@ const Login = () => {
             <input
               type="email"
               name=""
-              id=""
               className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none"
               required
               placeholder="Enter Email"
@@ -32,16 +45,17 @@ const Login = () => {
           <div className="mb-3 min-w-72">
             <p className="text-sm font-medium text-gray-700 mb-2">Password</p>
             <input
-              type="email"
+              type="password"
               name=""
-              id=""
               className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none"
               required
               placeholder="Enter Email"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className="mt-2 px-4 py-2 w-full rounded-md text-white bg-black"></button>
+          <button className="mt-2 px-4 py-2 w-full rounded-md text-white bg-black">
+            Login
+          </button>
         </form>
       </div>
     </div>
