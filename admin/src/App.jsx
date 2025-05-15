@@ -6,6 +6,9 @@ import Sidebar from "./components/Sidebar";
 import Add from "./pages/Add";
 import List from "./pages/List";
 import Order from "./pages/Order";
+
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 function App() {
   const [token, setToken] = useState("");
   return (
