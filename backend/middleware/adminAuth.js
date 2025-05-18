@@ -5,7 +5,7 @@ const adminAuth = (req, res, next) => {
     const { token } = req.headers;
 
     if (!token) {
-      return req.json({
+      return res.json({
         success: false,
         message: "Not authorized login again",
       });
@@ -16,7 +16,7 @@ const adminAuth = (req, res, next) => {
       decodedToken.email !== process.env.ADMIN_EMAIL ||
       decodedToken.password !== process.env.ADMIN_PASSWORD
     ) {
-      return req.json({
+      return res.json({
         success: false,
         message: "Not authorized login again",
       });
@@ -24,7 +24,7 @@ const adminAuth = (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    req.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 

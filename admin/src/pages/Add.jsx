@@ -1,4 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { backendUrl } from "../App";
 import { upload_area } from "../assets/index";
 
 const Add = () => {
@@ -12,33 +15,31 @@ const Add = () => {
     sizes: [],
     images: [],
   };
-  const [formData, setFormData] = useState(formObj);
+  const [data, setData] = useState(formObj);
 
   const handleChange = (e) => {
     const { type, name, checked, value } = e.target;
-    setFormData((prev) => ({
+    setData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleImageUpload = (e, index) => {
-    console.log(index);
-
     const file = e.target.files[0];
     if (!file) return;
 
-    const newImages = [...formData.images];
+    const newImages = [...data.images];
     newImages[index] = file;
 
-    setFormData((prev) => ({
+    setData((prev) => ({
       ...prev,
       images: newImages,
     }));
   };
 
   const handleSizeClick = (size) => {
-    setFormData((prev) => {
+    setData((prev) => {
       const sizes = prev.sizes.includes(size)
         ? prev.sizes.filter((includedSize) => includedSize !== size)
         : [...prev.sizes, size];
@@ -47,10 +48,47 @@ const Add = () => {
     });
   };
 
-  console.log(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("price", data.price);
+      formData.append("category", data.category);
+      formData.append("subCategory", data.subCategory);
+      formData.append("bestSeller", data.bestSeller);
+      formData.append("sizes", JSON.stringify(data.sizes));
+
+      // data.images[0] && formData.append("image1", data.images[0]);
+      // data.images[1] && formData.append("image2", data.images[1]);
+      // data.images[2] && formData.append("image3", data.images[2]);
+      // data.images[3] && formData.append("image4", data.images[3]);
+
+      data.images.forEach((img, i) => {
+        formData.append(`image${i + 1}`, img);
+      });
+
+      const response = await axios.post(backendUrl + "/product/add", formData);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        // formData.name: "",
+        // formData.description: "",
+        // formData.price: "",
+        // formData.category: "",
+        // formData.subCategory: "",
+        // formData.bestSeller: false,
+        // formData.sizes: [],
+        // formData.images: [],
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="flex flex-col items-start gap-3 w-full">
         <p>Upload Image</p>
         <div className="flex gap-2">
@@ -100,7 +138,7 @@ const Add = () => {
           type="text"
           name="name"
           id="name"
-          value={formData.name}
+          value={data.name}
           onChange={handleChange}
         />
       </div>
@@ -111,7 +149,7 @@ const Add = () => {
           placeholder="Product description"
           name="description"
           id="description"
-          value={formData.description}
+          value={data.description}
           onChange={handleChange}
         ></textarea>
       </div>
@@ -150,7 +188,7 @@ const Add = () => {
             type="Number"
             name="price"
             id="price"
-            value={formData.price}
+            value={data.price}
             onChange={handleChange}
           />
         </div>
@@ -159,19 +197,49 @@ const Add = () => {
         <p className="mb-2">Product Sizes</p>
         <div className="flex gap-3">
           <div onClick={() => handleSizeClick("s")}>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">S</p>
+            <p
+              className={`${
+                data.sizes.includes("s") ? "bg-pink-100" : "bg-slate-200"
+              } px-3 py-1 cursor-pointer`}
+            >
+              S
+            </p>
           </div>
           <div onClick={() => handleSizeClick("m")}>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">M</p>
+            <p
+              className={`${
+                data.sizes.includes("m") ? "bg-pink-100" : "bg-slate-200"
+              } px-3 py-1 cursor-pointer`}
+            >
+              M
+            </p>
           </div>
           <div onClick={() => handleSizeClick("l")}>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">L</p>
+            <p
+              className={`${
+                data.sizes.includes("l") ? "bg-pink-100" : "bg-slate-200"
+              } px-3 py-1 cursor-pointer`}
+            >
+              L
+            </p>
           </div>
           <div onClick={() => handleSizeClick("xl")}>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">XL</p>
+            <p
+              className={`${
+                data.sizes.includes("xl") ? "bg-pink-100" : "bg-slate-200"
+              } px-3 py-1 cursor-pointer`}
+            >
+              XL
+            </p>
           </div>
           <div onClick={() => handleSizeClick("xxl")}>
-            <p className="bg-slate-200 px-3 py-1 cursor-pointer">XXL</p>
+            <p
+              className={`${
+                data.sizes.includes("xxl") ? "bg-pink-100" : "bg-slate-200"
+              } px-3 py-1 cursor-pointer`}
+            >
+              XXL
+            </p>
           </div>
         </div>
       </div>
@@ -180,7 +248,7 @@ const Add = () => {
           type="checkbox"
           id="bestSeller"
           name="bestSeller"
-          checked={formData.bestSeller}
+          checked={data.bestSeller}
           onChange={handleChange}
         />
         <label className="cursor-pointer" htmlFor="bestSeller">
