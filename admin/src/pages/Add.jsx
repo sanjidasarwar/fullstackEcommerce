@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { backendUrl } from "../App";
 import { upload_area } from "../assets/index";
 
-const Add = () => {
+const Add = ({ token }) => {
   const formObj = {
     name: "",
     description: "",
@@ -70,17 +70,12 @@ const Add = () => {
         formData.append(`image${i + 1}`, img);
       });
 
-      const response = await axios.post(backendUrl + "/product/add", formData);
+      const response = await axios.post(backendUrl + "/product/add", formData, {
+        headers: { token },
+      });
       if (response.data.success) {
         toast.success(response.data.message);
-        // formData.name: "",
-        // formData.description: "",
-        // formData.price: "",
-        // formData.category: "",
-        // formData.subCategory: "",
-        // formData.bestSeller: false,
-        // formData.sizes: [],
-        // formData.images: [],
+        setData(formObj);
       }
     } catch (error) {
       toast.error(error.message);
@@ -93,7 +88,15 @@ const Add = () => {
         <p>Upload Image</p>
         <div className="flex gap-2">
           <label htmlFor="image1">
-            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <img
+              className="w-20"
+              src={
+                !data.images[0]
+                  ? upload_area
+                  : URL.createObjectURL(data.images[0])
+              }
+              alt="upload_image1"
+            />
             <input
               type="file"
               id="image1"
@@ -102,7 +105,15 @@ const Add = () => {
             />
           </label>
           <label htmlFor="image2">
-            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <img
+              className="w-20"
+              src={
+                !data.images[1]
+                  ? upload_area
+                  : URL.createObjectURL(data.images[1])
+              }
+              alt="upload_image1"
+            />
             <input
               type="file"
               id="image2"
@@ -111,7 +122,15 @@ const Add = () => {
             />
           </label>
           <label htmlFor="image3">
-            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <img
+              className="w-20"
+              src={
+                !data.images[2]
+                  ? upload_area
+                  : URL.createObjectURL(data.images[2])
+              }
+              alt="upload_image1"
+            />
             <input
               type="file"
               id="image3"
@@ -120,7 +139,15 @@ const Add = () => {
             />
           </label>
           <label htmlFor="image4">
-            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <img
+              className="w-20"
+              src={
+                !data.images[3]
+                  ? upload_area
+                  : URL.createObjectURL(data.images[3])
+              }
+              alt="upload_image1"
+            />
             <input
               type="file"
               id="image4"
