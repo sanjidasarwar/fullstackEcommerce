@@ -1,5 +1,197 @@
+import { useState } from "react";
+import { upload_area } from "../assets/index";
+
 const Add = () => {
-  return <div>add</div>;
+  const formObj = {
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    subCategory: "",
+    bestSeller: false,
+    sizes: [],
+    images: [],
+  };
+  const [formData, setFormData] = useState(formObj);
+
+  const handleChange = (e) => {
+    const { type, name, checked, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleImageUpload = (e, index) => {
+    console.log(index);
+
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const newImages = [...formData.images];
+    newImages[index] = file;
+
+    setFormData((prev) => ({
+      ...prev,
+      images: newImages,
+    }));
+  };
+
+  const handleSizeClick = (size) => {
+    setFormData((prev) => {
+      const sizes = prev.sizes.includes(size)
+        ? prev.sizes.filter((includedSize) => includedSize !== size)
+        : [...prev.sizes, size];
+
+      return { ...prev, sizes };
+    });
+  };
+
+  console.log(formData);
+
+  return (
+    <form>
+      <div className="flex flex-col items-start gap-3 w-full">
+        <p>Upload Image</p>
+        <div className="flex gap-2">
+          <label htmlFor="image1">
+            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <input
+              type="file"
+              id="image1"
+              hidden
+              onChange={(e) => handleImageUpload(e, 0)}
+            />
+          </label>
+          <label htmlFor="image2">
+            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <input
+              type="file"
+              id="image2"
+              hidden
+              onChange={(e) => handleImageUpload(e, 1)}
+            />
+          </label>
+          <label htmlFor="image3">
+            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <input
+              type="file"
+              id="image3"
+              hidden
+              onChange={(e) => handleImageUpload(e, 2)}
+            />
+          </label>
+          <label htmlFor="image4">
+            <img className="w-20" src={upload_area} alt="upload_image1" />
+            <input
+              type="file"
+              id="image4"
+              hidden
+              onChange={(e) => handleImageUpload(e, 3)}
+            />
+          </label>
+        </div>
+      </div>
+      <div className="w-full">
+        <p className="mb-2">Product Name</p>
+        <input
+          className="w-full max-w-[500px] px-3 py-2"
+          placeholder="Product name"
+          type="text"
+          name="name"
+          id="name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="w-full">
+        <p className="mb-2">Product Description</p>
+        <textarea
+          className="w-full max-w-[500px] px-3 py-2"
+          placeholder="Product description"
+          name="description"
+          id="description"
+          value={formData.description}
+          onChange={handleChange}
+        ></textarea>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
+        <div>
+          <p className="mb-2">Product Category</p>
+          <select
+            name="category"
+            id="category"
+            className="w-full px-3 py-2"
+            onChange={handleChange}
+          >
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+            <option value="kids">Kids</option>
+          </select>
+        </div>
+        <div>
+          <p className="mb-2">Sub Catagory</p>
+          <select
+            name="subCategory"
+            id="subCategory"
+            className="w-full px-3 py-2"
+            onChange={handleChange}
+          >
+            <option value="topwear">Topwear</option>
+            <option value="bottomWear">BottomWear</option>
+            <option value="winterwear">Winterwear</option>
+          </select>
+        </div>
+        <div>
+          <p className="mb-2">Product Price</p>
+          <input
+            className="w-full px-3 py-2 sm:w-[120px]"
+            placeholder="25"
+            type="Number"
+            name="price"
+            id="price"
+            value={formData.price}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+      <div>
+        <p className="mb-2">Product Sizes</p>
+        <div className="flex gap-3">
+          <div onClick={() => handleSizeClick("s")}>
+            <p className="bg-slate-200 px-3 py-1 cursor-pointer">S</p>
+          </div>
+          <div onClick={() => handleSizeClick("m")}>
+            <p className="bg-slate-200 px-3 py-1 cursor-pointer">M</p>
+          </div>
+          <div onClick={() => handleSizeClick("l")}>
+            <p className="bg-slate-200 px-3 py-1 cursor-pointer">L</p>
+          </div>
+          <div onClick={() => handleSizeClick("xl")}>
+            <p className="bg-slate-200 px-3 py-1 cursor-pointer">XL</p>
+          </div>
+          <div onClick={() => handleSizeClick("xxl")}>
+            <p className="bg-slate-200 px-3 py-1 cursor-pointer">XXL</p>
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-2 mt-2">
+        <input
+          type="checkbox"
+          id="bestSeller"
+          name="bestSeller"
+          checked={formData.bestSeller}
+          onChange={handleChange}
+        />
+        <label className="cursor-pointer" htmlFor="bestSeller">
+          Add to bestseller
+        </label>
+      </div>
+      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">
+        Add
+      </button>
+    </form>
+  );
 };
 
 export default Add;
