@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { backendUrl, currency } from "../App";
 
-const List = () => {
+const List = ({ token }) => {
   const [productList, setProductList] = useState([]);
 
   const fetchProduct = async () => {
@@ -11,6 +12,40 @@ const List = () => {
       const response = await axios.get(backendUrl + "/product/list");
       if (response.data.products) {
         setProductList(response.data.products);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  const handleDeleteProduct = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This product will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
+    try {
+      const response = await axios.post(
+        backendUrl + "/product/remove",
+        {
+          id,
+        },
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fetchProduct();
       } else {
         toast.error(response.data.message);
       }
@@ -50,7 +85,10 @@ const List = () => {
                 {currency}
                 {product.price}
               </td>
-              <td className="px-4 py-2 border border-gray-200 text-center hover:text-red-500 cursor-pointer">
+              <td
+                className="px-4 py-2 border border-gray-200 text-center hover:text-red-500 cursor-pointer"
+                onClick={() => handleDeleteProduct(product._id)}
+              >
                 X
               </td>
             </tr>

@@ -21,7 +21,7 @@ productRoute.post(
   ]),
   addProduct,
 );
-productRoute.post("/remove", removeProduct);
+productRoute.post("/remove", adminAuth, removeProduct);
 productRoute.post("/single", singleProduct);
 productRoute.get("/list", listProducts);
 
