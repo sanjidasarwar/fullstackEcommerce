@@ -1,16 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 import About from "./pages/About";
-import Collection from "./pages/Collection";
-import Product from "./pages/Product";
 import Cart from "./pages/Cart";
+import Collection from "./pages/Collection";
+import Contact from "./pages/Contact";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 import Orders from "./pages/Orders";
 import PlaceOrder from "./pages/PlaceOrder";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Product from "./pages/Product";
 
 function App() {
   return (
