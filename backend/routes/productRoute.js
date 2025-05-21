@@ -4,6 +4,7 @@ import {
   listProducts,
   removeProduct,
   singleProduct,
+  updateProduct,
 } from "../controllers/productController.js";
 import adminAuth from "../middleware/adminAuth.js";
 import upload from "../middleware/imageUpload.js";
@@ -21,6 +22,7 @@ productRoute.post(
   ]),
   addProduct,
 );
+productRoute.patch("/edit/:id", adminAuth, updateProduct);
 productRoute.post("/remove", adminAuth, removeProduct);
 productRoute.post("/single", singleProduct);
 productRoute.get("/list", listProducts);

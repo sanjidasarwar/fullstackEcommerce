@@ -1,21 +1,37 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { backendUrl } from "../App";
 import { upload_area } from "../assets/index";
 
-const Add = ({ token }) => {
+const Update = ({ token }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const existingProduct = location.state?.product;
+  const blobUrlsRef = useRef([]);
+
   const formObj = {
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    subCategory: "",
-    bestSeller: false,
-    sizes: [],
-    images: [],
+    id: existingProduct._id,
+    name: existingProduct.name,
+    description: existingProduct.description,
+    price: existingProduct.price,
+    category: existingProduct.category,
+    subCategory: existingProduct.subCategory,
+    bestSeller: existingProduct.bestSeller,
+    sizes: existingProduct.sizes,
+    images: existingProduct.image,
   };
   const [data, setData] = useState(formObj);
+
+  const getImgSrc = (img) => {
+    if (!img) return upload_area;
+    if (typeof img === "string") return img;
+
+    const blobUrl = URL.createObjectURL(img);
+    blobUrlsRef.current.push(blobUrl);
+    return blobUrl;
+  };
 
   const handleChange = (e) => {
     const { type, name, checked, value } = e.target;
@@ -61,26 +77,32 @@ const Add = ({ token }) => {
       formData.append("bestSeller", data.bestSeller);
       formData.append("sizes", JSON.stringify(data.sizes));
 
-      // data.images[0] && formData.append("image1", data.images[0]);
-      // data.images[1] && formData.append("image2", data.images[1]);
-      // data.images[2] && formData.append("image3", data.images[2]);
-      // data.images[3] && formData.append("image4", data.images[3]);
-
       data.images.forEach((img, i) => {
         formData.append(`image${i + 1}`, img);
       });
 
-      const response = await axios.post(backendUrl + "/product/add", formData, {
-        headers: { token, "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.patch(
+        backendUrl + `/product/edit/${data.id}`,
+        formData,
+        {
+          headers: { token },
+        }
+      );
       if (response.data.success) {
         toast.success(response.data.message);
-        setData(formObj);
+        navigate("/list");
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      blobUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      blobUrlsRef.current = [];
+    };
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -90,11 +112,7 @@ const Add = ({ token }) => {
           <label htmlFor="image1">
             <img
               className="w-20"
-              src={
-                !data.images[0]
-                  ? upload_area
-                  : URL.createObjectURL(data.images[0])
-              }
+              src={getImgSrc(data.images[0])}
               alt="upload_image1"
             />
             <input
@@ -107,11 +125,7 @@ const Add = ({ token }) => {
           <label htmlFor="image2">
             <img
               className="w-20"
-              src={
-                !data.images[1]
-                  ? upload_area
-                  : URL.createObjectURL(data.images[1])
-              }
+              src={getImgSrc(data.images[1])}
               alt="upload_image1"
             />
             <input
@@ -124,11 +138,7 @@ const Add = ({ token }) => {
           <label htmlFor="image3">
             <img
               className="w-20"
-              src={
-                !data.images[2]
-                  ? upload_area
-                  : URL.createObjectURL(data.images[2])
-              }
+              src={getImgSrc(data.images[2])}
               alt="upload_image1"
             />
             <input
@@ -141,11 +151,7 @@ const Add = ({ token }) => {
           <label htmlFor="image4">
             <img
               className="w-20"
-              src={
-                !data.images[3]
-                  ? upload_area
-                  : URL.createObjectURL(data.images[3])
-              }
+              src={getImgSrc(data.images[3])}
               alt="upload_image1"
             />
             <input
@@ -188,6 +194,7 @@ const Add = ({ token }) => {
             id="category"
             className="w-full px-3 py-2"
             onChange={handleChange}
+            value={data.category}
           >
             <option value="men">Men</option>
             <option value="women">Women</option>
@@ -201,6 +208,7 @@ const Add = ({ token }) => {
             id="subCategory"
             className="w-full px-3 py-2"
             onChange={handleChange}
+            value={data.subCategory}
           >
             <option value="topwear">Topwear</option>
             <option value="bottomWear">BottomWear</option>
@@ -286,10 +294,10 @@ const Add = ({ token }) => {
         type="submit"
         className="w-28 py-3 mt-4 bg-black text-white cursor-pointer"
       >
-        Add
+        update
       </button>
     </form>
   );
 };
 
-export default Add;
+export default Update;

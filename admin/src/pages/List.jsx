@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { backendUrl, currency } from "../App";
 
 const List = ({ token }) => {
   const [productList, setProductList] = useState([]);
+
+  const navigate = useNavigate();
 
   const fetchProduct = async () => {
     try {
@@ -54,7 +57,9 @@ const List = ({ token }) => {
       toast.error(error.message);
     }
   };
-
+  const handleUpdate = (product) => {
+    navigate("/update", { state: { product } });
+  };
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -68,7 +73,10 @@ const List = ({ token }) => {
             <td className="px-4 py-2 border border-gray-200">Product Name</td>
             <td className="px-4 py-2 border border-gray-200">Category</td>
             <td className="px-4 py-2 border border-gray-200">price</td>
-            <td className="px-4 py-2 border border-gray-200 text-center">
+            <td
+              className="px-4 py-2 border border-gray-200 text-center"
+              colSpan={2}
+            >
               Action
             </td>
           </tr>
@@ -86,10 +94,16 @@ const List = ({ token }) => {
                 {product.price}
               </td>
               <td
-                className="px-4 py-2 border border-gray-200 text-center hover:text-red-500 cursor-pointer"
+                className="px-4 py-2 border border-gray-200 text-center text-red-500 cursor-pointer"
                 onClick={() => handleDeleteProduct(product._id)}
               >
-                X
+                Delete
+              </td>
+              <td
+                className="px-4 py-2 border border-gray-200 text-center text-blue-500 cursor-pointer"
+                onClick={() => handleUpdate(product)}
+              >
+                Edit
               </td>
             </tr>
           ))}

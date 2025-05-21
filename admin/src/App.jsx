@@ -8,6 +8,7 @@ import Sidebar from "./components/Sidebar";
 import Add from "./pages/Add";
 import List from "./pages/List";
 import Order from "./pages/Order";
+import Update from "./pages/Update";
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export const currency = "$";
@@ -31,7 +32,7 @@ function App() {
           <Login handleToken={handleToken} />
         ) : (
           <>
-            <Navbar />
+            <Navbar handleToken={handleToken} />
             <hr />
             <div className="flex w-full">
               <Sidebar />
@@ -39,6 +40,7 @@ function App() {
                 <Routes>
                   <Route path="/add" element={<Add token={token} />} />
                   <Route path="/list" element={<List token={token} />} />
+                  <Route path="/update" element={<Update token={token} />} />
                   <Route path="/order" element={<Order token={token} />} />
                 </Routes>
               </div>
