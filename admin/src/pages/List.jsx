@@ -63,6 +63,7 @@ const List = ({ token }) => {
   useEffect(() => {
     fetchProduct();
   }, []);
+  console.log(productList);
 
   return (
     <>

@@ -2,8 +2,6 @@ import cloudinary from "cloudinary";
 import ProductModel from "../models/Product.js";
 
 const addProduct = async (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
   try {
     const {
       name,
