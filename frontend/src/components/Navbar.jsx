@@ -1,11 +1,11 @@
 // import React from "react";
-import { logo } from "../assets";
-import { Link, NavLink } from "react-router-dom";
-import { IoSearchOutline } from "react-icons/io5";
-import { FiUser } from "react-icons/fi";
-import { FaShoppingBag, FaAngleDoubleLeft } from "react-icons/fa";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { useContext, useState } from "react";
+import { FaAngleDoubleLeft, FaShoppingBag } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
+import { IoSearchOutline } from "react-icons/io5";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { Link, NavLink } from "react-router-dom";
+import { logo } from "../assets";
 import { ShopContext } from "../context/shopContext";
 
 const Navbar = () => {
@@ -40,7 +40,7 @@ const Navbar = () => {
 
         <div className="relative group">
           <FiUser className="cursor-pointer" />
-          <div className="dropdown-menu group-hover:block hidden absolute left-0 pt-4">
+          <div className="dropdown-menu group-hover:block hidden absolute left-0 pt-4 z-50">
             <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow-md">
               <p>My Profile</p>
               <p>Orders</p>

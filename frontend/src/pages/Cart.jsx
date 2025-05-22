@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/shopContext";
-import Title from "../components/Title";
+import { useContext, useEffect, useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 import CartTotal from "../components/CartTotal";
+import Title from "../components/Title";
+import { ShopContext } from "../context/shopContext";
 
 const Cart = () => {
   const {
@@ -91,7 +91,9 @@ const Cart = () => {
                 defaultValue={item.quantity}
                 onChange={(e) => handleInputChange(e, item)}
               />
-              <FaRegTrashCan />
+              <FaRegTrashCan
+                onClick={() => updateQuantity(item._id, item.size, 0)}
+              />
             </div>
           );
         })}

@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import ProductItem from "../components/ProductItem";
 import Title from "../components/Title";
 import { ShopContext } from "../context/shopContext";
-import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
   const [showFiilter, setShowFilter] = useState(false);
@@ -68,7 +68,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, products]);
 
   useEffect(() => {
     sortProduct();
