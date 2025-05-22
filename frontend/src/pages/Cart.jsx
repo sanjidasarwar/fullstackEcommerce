@@ -22,29 +22,31 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    let tempData = [];
-    // for (const items in cartItems) {
-    //   for (const item in cartItems[items]) {
-    //     if (cartItems[items][item] > 0) {
-    //       tempData.push({
-    //         _id: items,
-    //         size: item,
-    //         quantity: cartItems[items][item],
-    //       });
-    //     }
-    //   }
-    // }
-    const arrOfCartItems = Object.entries(cartItems);
-    arrOfCartItems.forEach(([productId, sizes]) => {
-      Object.entries(sizes).forEach(([size, quantity]) => {
-        tempData.push({
-          _id: productId,
-          size,
-          quantity,
+    if (products.length > 0) {
+      let tempData = [];
+      // for (const items in cartItems) {
+      //   for (const item in cartItems[items]) {
+      //     if (cartItems[items][item] > 0) {
+      //       tempData.push({
+      //         _id: items,
+      //         size: item,
+      //         quantity: cartItems[items][item],
+      //       });
+      //     }
+      //   }
+      // }
+      const arrOfCartItems = Object.entries(cartItems);
+      arrOfCartItems.forEach(([productId, sizes]) => {
+        Object.entries(sizes).forEach(([size, quantity]) => {
+          tempData.push({
+            _id: productId,
+            size,
+            quantity,
+          });
         });
       });
-    });
-    setCartData(tempData);
+      setCartData(tempData);
+    }
   }, [cartItems, products]);
 
   return (
@@ -88,10 +90,11 @@ const Cart = () => {
                 className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
                 type="number"
                 min="1"
-                defaultValue={item.quantity}
+                value={item.quantity}
                 onChange={(e) => handleInputChange(e, item)}
               />
               <FaRegTrashCan
+                className="cursor-pointer"
                 onClick={() => updateQuantity(item._id, item.size, 0)}
               />
             </div>

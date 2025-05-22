@@ -14,10 +14,10 @@ const Navbar = () => {
     useContext(ShopContext);
 
   const handleLogout = () => {
-    navigate("/login");
     handleToken("");
     localStorage.removeItem("token");
     handleCartItem({});
+    navigate("/login");
   };
 
   return (
