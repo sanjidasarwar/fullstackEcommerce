@@ -113,6 +113,10 @@ const ShopContextProvider = (props) => {
     setToken(newToken);
   };
 
+  const handleCartItem = (newCartItems) => {
+    setCartItems(newCartItems);
+  };
+
   useEffect(() => {
     getProductsData();
   }, []);
@@ -138,6 +142,7 @@ const ShopContextProvider = (props) => {
     backendUrl,
     token,
     handleToken,
+    handleCartItem,
   };
 
   return (
