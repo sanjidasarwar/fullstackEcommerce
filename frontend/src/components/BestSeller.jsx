@@ -6,7 +6,6 @@ import Title from "./Title";
 function BestSeller() {
   const [bestSeller, setBestSeller] = useState([]);
   const { products } = useContext(ShopContext);
-  console.log(products);
 
   useEffect(() => {
     const bestProduct = products.filter((product) => product.bestSeller);

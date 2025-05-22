@@ -7,7 +7,7 @@ import createToken from "../utilities/createToken.js";
 const loginUser = async (req, res) => {
   try {
     const user = await User.findOne({
-      $or: [{ email: req.body.name }, { name: req.body.name }],
+      $or: [{ email: req.body.userName }, { name: req.body.userName }],
     });
 
     if (!user) {
@@ -35,12 +35,13 @@ const loginUser = async (req, res) => {
 
     const token = createToken(userObj);
 
-    res.status(200).json({
+    return res.status(200).json({
+      success: true,
       message: "Login Sucessful",
       token,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -79,7 +80,7 @@ const loginAdmin = (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    console.log(typeof name, typeof email, typeof password);
+    console.log(name, email, password);
 
     const exists = await User.findOne({ email: email });
     if (exists) {
@@ -122,12 +123,12 @@ const registerUser = async (req, res) => {
 
     const user = newUser.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "User was added successfully!",
       user,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: `Error => ${error.message}`,
     });

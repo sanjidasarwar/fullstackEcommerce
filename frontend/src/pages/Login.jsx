@@ -1,13 +1,59 @@
+import axios from "axios";
 import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import { ShopContext } from "../context/shopContext";
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState("Sign Up");
-  const { token } = useContext(ShopContext);
+  const [currentState, setCurrentState] = useState("Login");
+  const [formData, setFormData] = useState({
+    name: "",
+    userName: "",
+    password: "",
+  });
+  const { token, backendUrl, handleToken, navigate } = useContext(ShopContext);
 
-  const onSubmitHandaler = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
+
+  const onSubmitHandaler = async (e) => {
+    e.preventDefault();
+    try {
+      if (currentState === "Sign Up") {
+        const response = await axios.post(backendUrl + "/user/register", {
+          name: formData.name,
+          email: formData.userName,
+          password: formData.password,
+        });
+        if (response.data.success) {
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } else {
+        const response = await axios.post(backendUrl + "/user/login", {
+          userName: formData.userName,
+          password: formData.password,
+        });
+
+        if (response.data.success) {
+          toast.success(response.data.message);
+          handleToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+          navigate("/");
+        } else {
+          toast.error(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <form
       onSubmit={onSubmitHandaler}
@@ -18,26 +64,45 @@ const Login = () => {
         <hr className="border-none h-[1.5px] w-8 bg-gray-800" />
       </div>
       {currentState === "Login" ? (
-        ""
-      ) : (
         <input
           type="text"
           className="w-full px-3 py-2 border border-gray-800"
-          placeholder="Name"
+          placeholder="Enter Name/Email"
           required=""
+          value={formData.userName}
+          name="userName"
+          onChange={(e) => handleChange(e)}
         />
+      ) : (
+        <>
+          <input
+            type="text"
+            className="w-full px-3 py-2 border border-gray-800"
+            placeholder="Name"
+            required=""
+            value={formData.name}
+            name="name"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="email"
+            className="w-full px-3 py-2 border border-gray-800"
+            placeholder="Email"
+            required=""
+            name="userName"
+            value={formData.userName}
+            onChange={(e) => handleChange(e)}
+          />
+        </>
       )}
-      <input
-        type="email"
-        className="w-full px-3 py-2 border border-gray-800"
-        placeholder="Email"
-        required=""
-      />
       <input
         type="password"
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Password"
+        name="password"
+        value={formData.password}
         required=""
+        onChange={(e) => handleChange(e)}
       />
       <div className="w-full flex justify-between text-sm mt-[-8px]">
         <p className=" cursor-pointer">Forgot your password?</p>

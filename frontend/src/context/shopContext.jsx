@@ -110,11 +110,17 @@ const ShopContextProvider = (props) => {
   };
 
   const handleToken = (newToken) => {
-    setToken(token);
+    setToken(newToken);
   };
 
   useEffect(() => {
     getProductsData();
+  }, []);
+
+  useEffect(() => {
+    if (!token && localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"));
+    }
   }, []);
 
   const value = {

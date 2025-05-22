@@ -4,14 +4,20 @@ import { FaAngleDoubleLeft, FaShoppingBag } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
 import { IoSearchOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { logo } from "../assets";
 import { ShopContext } from "../context/shopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { getCartCount, token, handleToken } = useContext(ShopContext);
-  const navigate = useNavigate();
+  const { getCartCount, token, handleToken, navigate } =
+    useContext(ShopContext);
+
+  const handleLogout = () => {
+    navigate("/");
+    handleToken("");
+    localStorage.removeItem("token");
+  };
 
   return (
     <div className="flex items-center justify-between py-5 font-medium">
@@ -55,7 +61,7 @@ const Navbar = () => {
               )}
               <p
                 className="font-normal hover:font-bold hover:text-black cursor-pointer"
-                onClick={() => (token ? handleToken("") : navigate("/login"))}
+                onClick={() => (token ? handleLogout() : navigate("/login"))}
               >
                 {token ? "Logout" : "Login"}
               </p>
