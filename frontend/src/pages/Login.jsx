@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { ShopContext } from "../context/shopContext";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Sign Up");
+  const { token } = useContext(ShopContext);
+
   const onSubmitHandaler = (e) => {
     e.preventDefault();
   };

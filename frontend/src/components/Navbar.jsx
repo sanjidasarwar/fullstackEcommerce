@@ -4,13 +4,14 @@ import { FaAngleDoubleLeft, FaShoppingBag } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
 import { IoSearchOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
 import { ShopContext } from "../context/shopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { getCartCount } = useContext(ShopContext);
+  const { getCartCount, token, handleToken } = useContext(ShopContext);
+  const navigate = useNavigate();
 
   return (
     <div className="flex items-center justify-between py-5 font-medium">
@@ -41,10 +42,23 @@ const Navbar = () => {
         <div className="relative group">
           <FiUser className="cursor-pointer" />
           <div className="dropdown-menu group-hover:block hidden absolute left-0 pt-4 z-50">
-            <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow-md">
-              <p>My Profile</p>
-              <p>Orders</p>
-              <p>Logout</p>
+            <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded shadow-md">
+              {token && (
+                <>
+                  <p className="font-normal hover:font-bold hover:text-black cursor-pointer">
+                    My Profile
+                  </p>
+                  <p className="font-normal hover:font-bold hover:text-black cursor-pointer">
+                    Orders
+                  </p>
+                </>
+              )}
+              <p
+                className="font-normal hover:font-bold hover:text-black cursor-pointer"
+                onClick={() => (token ? handleToken("") : navigate("/login"))}
+              >
+                {token ? "Logout" : "Login"}
+              </p>
             </div>
           </div>
         </div>
