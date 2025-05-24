@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Title from "../components/Title";
 import { ShopContext } from "../context/shopContext";
 
 const Orders = () => {
   const { currency, products } = useContext(ShopContext);
-  console.log(products);
 
   return (
     <div className="border-t pt-16">

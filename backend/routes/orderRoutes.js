@@ -6,9 +6,9 @@ import {
     placeOrderStripe,
     updateStatus,
     userOrders,
-} from "../controllers/orderController";
-import adminAuth from "../middleware/adminAuth";
-import userAuth from "../middleware/userAuth";
+} from "../controllers/orderController.js";
+import adminAuth from "../middleware/adminAuth.js";
+import userAuth from "../middleware/userAuth.js";
 
 const orderRoute = express.Router();
 

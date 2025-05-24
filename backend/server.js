@@ -5,6 +5,7 @@ import express from "express";
 import connectCloudinary from "./config/cloudinary.js";
 import connectDB from "./config/mongodb.js";
 import cartRoute from "./routes/cartRoute.js";
+import orderRoute from "./routes/orderRoutes.js";
 import productRoute from "./routes/productRoute.js";
 import userRoute from "./routes/userRoute.js";
 
@@ -24,7 +25,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use("/user", userRoute);
 app.use("/product", productRoute);
 app.use("/cart", cartRoute);
-app.use("/order", cartRoute);
+app.use("/order", orderRoute);
 
 app.get("/", (req, res) => {
   res.send("Api working");
