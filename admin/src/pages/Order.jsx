@@ -13,7 +13,6 @@ const Order = ({ token }) => {
       const response = await axios.get(backendUrl + "/order/list", {
         headers: { token },
       });
-      console.log(response);
 
       if (response.data.success) {
         setOrders(response.data.allOrdersList);
@@ -22,6 +21,23 @@ const Order = ({ token }) => {
       }
     } catch (error) {
       console.log(error.message);
+    }
+  };
+  const handleStatus = async (e, orderId) => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/order/status",
+        { orderId, status: e.target.value },
+        {
+          headers: { token },
+        }
+      );
+      if (response.data.success) {
+        await loadAllOrders();
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
     }
   };
   useEffect(() => {
@@ -85,7 +101,13 @@ const Order = ({ token }) => {
               {currency}
               {order.amount}
             </p>
-            <select className="p-2 font-semibold" name="" id="">
+            <select
+              value={order.status}
+              onChange={(e) => handleStatus(e, order._id)}
+              className="p-2 font-semibold"
+              name=""
+              id=""
+            >
               <option value="order placeed">Order Placeed</option>
               <option value="packing">Packing</option>
               <option value="shiping">Shiping</option>
