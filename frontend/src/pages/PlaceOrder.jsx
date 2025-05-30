@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { razor, stripe } from "../assets";
+import { stripe } from "../assets";
 import CartTotal from "../components/CartTotal";
 import Title from "../components/Title";
 import { ShopContext } from "../context/shopContext";
@@ -65,7 +65,7 @@ function PlaceOrder() {
       };
 
       switch (paymentMethod) {
-        case "cod":
+        case "cod": {
           const response = await axios.post(
             backendUrl + "/order/place",
             orderData,
@@ -81,6 +81,23 @@ function PlaceOrder() {
             toast.error(response.data.message);
           }
           break;
+        }
+        case "stripe": {
+          const responseStripe = await axios.post(
+            backendUrl + "/order/stripe",
+            orderData,
+            {
+              headers: { token },
+            }
+          );
+
+          if (responseStripe.data.success) {
+            window.location.replace(responseStripe.data.session_url);
+          } else {
+            toast.error(responseStripe.data.message);
+          }
+          break;
+        }
         default:
           break;
       }
@@ -206,7 +223,7 @@ function PlaceOrder() {
               ></p>
               <img className="h-5 mx-4" src={stripe} alt="" />
             </div>
-            <div
+            {/* <div
               onClick={() => setPaymentMethod("razor")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
             >
@@ -216,7 +233,7 @@ function PlaceOrder() {
                 }`}
               ></p>
               <img className="h-5 mx-4" src={razor} alt="" />
-            </div>
+            </div> */}
             <div
               onClick={() => setPaymentMethod("cod")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"

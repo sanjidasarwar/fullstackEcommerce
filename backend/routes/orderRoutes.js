@@ -2,10 +2,10 @@ import express from "express";
 import {
     allOrders,
     placeOrder,
-    placeOrderRazorpay,
     placeOrderStripe,
     updateStatus,
     userOrders,
+    varifyStripe
 } from "../controllers/orderController.js";
 import adminAuth from "../middleware/adminAuth.js";
 import userAuth from "../middleware/userAuth.js";
@@ -19,7 +19,8 @@ orderRoute.post("/status", adminAuth, updateStatus);
 // payment features
 orderRoute.post("/place", userAuth, placeOrder);
 orderRoute.post("/stripe", userAuth, placeOrderStripe);
-orderRoute.post("/razorpay", userAuth, placeOrderRazorpay);
+
+orderRoute.post("/varifyStripe", userAuth, varifyStripe);
 
 // user features
 orderRoute.get("/userOrders", userAuth, userOrders);

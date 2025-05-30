@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Orders from "./pages/Orders";
 import PlaceOrder from "./pages/PlaceOrder";
 import Product from "./pages/Product";
+import Varify from "./pages/Varify";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/varify" element={<Varify />} />
       </Routes>
       <Footer />
       <ToastContainer />

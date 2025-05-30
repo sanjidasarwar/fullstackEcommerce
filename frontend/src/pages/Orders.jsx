@@ -13,7 +13,6 @@ const Orders = () => {
       const response = await axios.get(backendUrl + "/order/userOrders", {
         headers: { token },
       });
-      console.log(response);
 
       if (response.data.success) {
         const allOrdersItem = [];
@@ -38,8 +37,6 @@ const Orders = () => {
   useEffect(() => {
     loadOrderData();
   }, [token]);
-
-  console.log(orders);
 
   return (
     <div className="border-t pt-16">

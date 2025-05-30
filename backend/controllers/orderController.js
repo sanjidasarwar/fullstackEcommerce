@@ -3,11 +3,11 @@ import Order from "../models/Order.js";
 import User from "../models/User.js";
 
 // global variable
-const currency = "$";
+const currency = "usd";
 const delivery_fee = 100;
 
 //stripe intigration
-const stripe = new Stripe()(process.env.STRIPE_SECRET);
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 // placing orders using COD Method
 const placeOrder = async (req, res) => {
@@ -45,7 +45,8 @@ const placeOrder = async (req, res) => {
 const placeOrderStripe = async (req, res) => {
   const { userId } = req;
   const { items, amount, address } = req.body;
-  const { origin } = req.header;
+  const { origin } = req.headers;
+
   try {
     const orderData = {
       userId,
@@ -66,7 +67,7 @@ const placeOrderStripe = async (req, res) => {
         product_data: {
           name: item.name,
         },
-        unit_amount: item.price,
+        unit_amount: item.price * 100,
       },
       quantity: item.quantity,
     }));
@@ -77,7 +78,7 @@ const placeOrderStripe = async (req, res) => {
         product_data: {
           name: "Delivery Fee",
         },
-        unit_amount: delivery_fee,
+        unit_amount: delivery_fee * 100,
       },
       quantity: 1,
     });
@@ -99,14 +100,32 @@ const placeOrderStripe = async (req, res) => {
     });
   }
 };
-// placing orders using razorpay Method
-const placeOrderRazorpay = async (req, res) => {};
+
+// varify stripe payment
+const varifyStripe = async (req, res) => {
+  const { userId } = req;
+  const { success, orderId } = req.body;
+
+  try {
+    if (success === "true") {
+      await Order.findByIdAndUpdate(orderId, { payment: true });
+      await User.findByIdAndUpdate(userId, { cartData: {} });
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 // all orders data for admin panel
 const allOrders = async (req, res) => {
   try {
     const allOrdersList = await Order.find({});
-    console.log(allOrdersList);
 
     res.status(200).json({
       success: true,
@@ -152,9 +171,9 @@ const updateStatus = async (req, res) => {
 export {
   allOrders,
   placeOrder,
-  placeOrderRazorpay,
   placeOrderStripe,
   updateStatus,
-  userOrders
+  userOrders,
+  varifyStripe
 };
 

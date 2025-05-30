@@ -15,7 +15,7 @@ const Order = ({ token }) => {
       });
 
       if (response.data.success) {
-        setOrders(response.data.allOrdersList);
+        setOrders(response.data.allOrdersList.reverse());
       } else {
         toast.error(response.data.message);
       }
