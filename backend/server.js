@@ -22,10 +22,10 @@ app.use(cors());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // api endpoint
-app.use("/user", userRoute);
-app.use("/product", productRoute);
-app.use("/cart", cartRoute);
-app.use("/order", orderRoute);
+app.use("user", userRoute);
+app.use("product", productRoute);
+app.use("cart", cartRoute);
+app.use("order", orderRoute);
 
 app.get("/", (req, res) => {
   res.send("Api working");
