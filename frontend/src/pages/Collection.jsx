@@ -99,7 +99,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={"Men"}
+                value={"men"}
                 onChange={toggleCatagory}
               />{" "}
               Men
@@ -108,7 +108,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={"Women"}
+                value={"women"}
                 onChange={toggleCatagory}
               />{" "}
               Women
@@ -117,7 +117,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={"Kids"}
+                value={"kids"}
                 onChange={toggleCatagory}
               />{" "}
               kids
@@ -136,7 +136,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={"Topwear"}
+                value={"topwear"}
                 onChange={togglesubCategory}
               />
               Topwear
@@ -145,7 +145,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={"Bottomwear"}
+                value={"bottomwear"}
                 onChange={togglesubCategory}
               />
               Bottomwear
@@ -154,7 +154,7 @@ const Collection = () => {
               <input
                 className="w-3"
                 type="checkbox"
-                value={"Winterwear"}
+                value={"winterwear"}
                 onChange={togglesubCategory}
               />
               Winterwear

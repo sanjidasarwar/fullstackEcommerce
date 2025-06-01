@@ -78,7 +78,7 @@ function PlaceOrder() {
             handleCartItem({});
             navigate("/orders");
           } else {
-            toast.error(response.data.message);
+            toast.error("Login again");
           }
           break;
         }
