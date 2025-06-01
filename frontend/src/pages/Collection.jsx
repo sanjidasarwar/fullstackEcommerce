@@ -31,11 +31,14 @@ const Collection = () => {
 
   const applyFilter = () => {
     let productsCopy = products.slice();
+    console.log(category);
+    console.log(productsCopy);
 
     if (category.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         category.includes(item.category)
       );
+      console.log(productsCopy);
     }
 
     if (subCategory.length > 0) {
@@ -101,7 +104,7 @@ const Collection = () => {
                 type="checkbox"
                 value={"men"}
                 onChange={toggleCatagory}
-              />{" "}
+              />
               Men
             </p>
             <p className="flex gap-2">
@@ -110,7 +113,7 @@ const Collection = () => {
                 type="checkbox"
                 value={"women"}
                 onChange={toggleCatagory}
-              />{" "}
+              />
               Women
             </p>
             <p className="flex gap-2">
@@ -119,7 +122,7 @@ const Collection = () => {
                 type="checkbox"
                 value={"kids"}
                 onChange={toggleCatagory}
-              />{" "}
+              />
               kids
             </p>
           </div>

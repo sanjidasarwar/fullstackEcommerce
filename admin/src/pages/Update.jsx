@@ -85,7 +85,7 @@ const Update = ({ token }) => {
         backendUrl + `/product/edit/${data.id}`,
         formData,
         {
-          headers: { token },
+          headers: { token, "Content-Type": "multipart/form-data" },
         }
       );
       if (response.data.success) {
@@ -196,6 +196,9 @@ const Update = ({ token }) => {
             onChange={handleChange}
             value={data.category}
           >
+            <option value="" disabled>
+              -- Select Category --
+            </option>
             <option value="men">Men</option>
             <option value="women">Women</option>
             <option value="kids">Kids</option>
@@ -210,6 +213,9 @@ const Update = ({ token }) => {
             onChange={handleChange}
             value={data.subCategory}
           >
+            <option value="" disabled>
+              -- Select Sub Category --
+            </option>
             <option value="topwear">Topwear</option>
             <option value="bottomWear">BottomWear</option>
             <option value="winterwear">Winterwear</option>

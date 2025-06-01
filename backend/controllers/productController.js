@@ -28,7 +28,10 @@ const addProduct = async (req, res) => {
         const result = await cloudinary.uploader.upload(img.path, {
           resource_type: "image",
         });
-        return result.secure_url;
+        return {
+          url: result.secure_url,
+          public_id: result.public_id,
+        };
       }),
     );
 
@@ -60,9 +63,6 @@ const addProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
-
   try {
     const {
       name,
@@ -80,20 +80,42 @@ const updateProduct = async (req, res) => {
     const image4 = req.files.image4 && req.files.image4[0];
 
     // if an image is not uploaded
-    const images = [image1, image2, image3, image4].filter(
+    const newImages = [image1, image2, image3, image4].filter(
       (img) => img !== undefined,
     );
 
-    const imageUrl = await Promise.all(
-      images.map(async (img) => {
-        const result = await cloudinary.uploader.upload(img.path, {
-          resource_type: "image",
-        });
-        return result.secure_url;
-      }),
-    );
+    let imageData = [];
 
-    const prodeuctData = {
+    const existingProduct = await ProductModel.findById(req.params.id);
+
+    // If new images are uploaded, delete old images from Cloudinary
+    if (newImages.length > 0 && existingProduct.image.length > 0) {
+      await Promise.all(
+        existingProduct.image.map(async (img) => {
+          if (img.public_id) {
+            await cloudinary.uploader.destroy(img.public_id);
+          }
+        }),
+      );
+
+      // Upload new images and get public_id + url
+      imageData = await Promise.all(
+        newImages.map(async (img) => {
+          const result = await cloudinary.uploader.upload(img.path, {
+            resource_type: "image",
+          });
+          return {
+            url: result.secure_url,
+            public_id: result.public_id,
+          };
+        }),
+      );
+    } else {
+      // If no new images uploaded, keep existing ones
+      imageData = existingProduct.image;
+    }
+
+    const productData = {
       name,
       description,
       price: Number(price),
@@ -102,12 +124,12 @@ const updateProduct = async (req, res) => {
       sizes: JSON.parse(sizes),
       bestSeller: bestSeller === "true",
       date: Date.now(),
-      image: imageUrl,
+      image: imageData,
     };
 
     await ProductModel.findByIdAndUpdate(
       req.params.id,
-      { prodeuctData },
+      { ...productData },
       { new: true },
     );
 
@@ -116,6 +138,8 @@ const updateProduct = async (req, res) => {
       message: "Product update successfully",
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       success: false,
       message: error.message,
