@@ -1,4 +1,3 @@
-import React from "react";
 import { logo } from "../assets";
 
 function Footer() {
@@ -26,8 +25,8 @@ function Footer() {
         <div>
           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
           <ul className="flex flex-col gap-1 text-gray-600">
-            <li>+1-000-000-0000</li>
-            <li>greatstackdev@gmail.com</li>
+            <li>+88-000-000-0000</li>
+            <li>sanjida@gmail.com</li>
             <li className="cursor-pointer">Instagram</li>
           </ul>
         </div>
