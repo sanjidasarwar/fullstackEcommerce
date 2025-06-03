@@ -1,4 +1,4 @@
-import bycript from "bcrypt";
+import bcript from "bcrypt";
 import validator from "validator";
 import User from "../models/User.js";
 import createToken from "../utilities/createToken.js";
@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const validPassword = await bycript.compare(
+    const validPassword = await bcript.compare(
       req.body.password,
       user.password,
     );
@@ -80,7 +80,6 @@ const loginAdmin = (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    console.log(name, email, password);
 
     const exists = await User.findOne({ email: email });
     if (exists) {
@@ -113,7 +112,7 @@ const registerUser = async (req, res) => {
     }
 
     // hashing password
-    const hashedPassword = await bycript.hash(password, 10);
+    const hashedPassword = await bcript.hash(password, 10);
 
     const newUser = new User({
       name,
