@@ -1,4 +1,4 @@
-import bcript from "bcrypt";
+import bycript from "bcrypt";
 import validator from "validator";
 import User from "../models/User.js";
 import createToken from "../utilities/createToken.js";
@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const validPassword = await bcript.compare(
+    const validPassword = await bycript.compare(
       req.body.password,
       user.password,
     );
@@ -112,7 +112,7 @@ const registerUser = async (req, res) => {
     }
 
     // hashing password
-    const hashedPassword = await bcript.hash(password, 10);
+    const hashedPassword = await bycript.hash(password, 10);
 
     const newUser = new User({
       name,
