@@ -48,7 +48,7 @@ const Navbar = () => {
 
         <div className="relative group">
           <FiUser className="cursor-pointer" />
-          <div className="dropdown-menu group-hover:block hidden absolute left-0 pt-4 z-50">
+          <div className="dropdown-menu group-hover:block hidden absolute left-0 pt-4 z-[9999]">
             <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded shadow-md">
               {token && (
                 <>
